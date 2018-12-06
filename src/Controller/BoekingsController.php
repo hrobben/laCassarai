@@ -76,12 +76,10 @@ class BoekingsController extends AbstractController
             $repository = $this->getDoctrine()
                 ->getRepository(Reservatie::class);
 
-            //$tosub = new DateInterval('PT4H');
-            $start = $boeking['datumtijd'];
-            $eind = $boeking['datumtijd'];
-            $start->modify('-4 hours');
-            $eind->modify('+4 hours');
-                dump($start);
+            $start = date("Y-m-d H:m:s", strtotime('-4 hours', $boeking['datumtijd']->getTimestamp()));
+            $eind = date("Y-m-d H:m:s", strtotime('+4 hours', $boeking['datumtijd']->getTimestamp()));
+
+
             $query = $repository->createQueryBuilder('p')
                 ->where('p.datumTijd BETWEEN :startDateTime AND :endDateTime')
                 ->setParameter('startDateTime', $start)
@@ -111,7 +109,7 @@ class BoekingsController extends AbstractController
             $boeking['tafels'] = $tafels;
             $session->set('boeking', $boeking);
 
-            return $this->redirectToRoute('check');
+            //return $this->redirectToRoute('check');
         }
 
         return $this->render('boekings/index.html.twig', array(
