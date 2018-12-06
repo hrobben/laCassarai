@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New BankCart{% endblock %}
+
+{% block body %}
+    {% if is_granted('ROLE_USER') %}
+        <h1>Create new BankCart</h1>
+
+        {{ include('bank_cart/_form.html.twig') }}
+
+        <a href="{{ path('bank_cart_index') }}">back to list</a>
+    {% else %}
+        <h1> Access Denied!!!!!</h1>
+    {% endif %}
+{% endblock %}

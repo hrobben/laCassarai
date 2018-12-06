@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BankCart index{% endblock %}
+
+{% block body %}
+    <h1>BankCart index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Accountnr</th>
+                <th>Bank</th>
+                <th>Cardnr</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bank_cart in bank_carts %}
+            <tr>
+                <td>{{ bank_cart.id }}</td>
+                <td>{{ bank_cart.accountnr }}</td>
+                <td>{{ bank_cart.bank }}</td>
+                <td>{{ bank_cart.cardnr }}</td>
+                <td>
+                    <a href="{{ path('bank_cart_show', {'id': bank_cart.id}) }}">show</a>
+                    <a href="{{ path('bank_cart_edit', {'id': bank_cart.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('bank_cart_new') }}">Create new</a>
+{% endblock %}

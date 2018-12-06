@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catergory{% endblock %}
+
+{% block body %}
+    <h1>Catergory</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ catergory.id }}</td>
+            </tr>
+            <tr>
+                <th>Omschrijving</th>
+                <td>{{ catergory.omschrijving }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('catergory_index') }}">back to list</a>
+
+    <a href="{{ path('catergory_edit', {'id': catergory.id}) }}">edit</a>
+
+    {{ include('catergory/_delete_form.html.twig') }}
+{% endblock %}

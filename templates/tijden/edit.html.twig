@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Tijden{% endblock %}
+
+{% block body %}
+    <h1>Edit Tijden</h1>
+
+    {{ include('tijden/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('tijden_index') }}">back to list</a>
+
+    {{ include('tijden/_delete_form.html.twig') }}
+{% endblock %}
