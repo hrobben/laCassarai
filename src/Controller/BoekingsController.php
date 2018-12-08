@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Reservatie;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -55,14 +56,24 @@ class BoekingsController extends AbstractController
                 ->add('aantal', IntegerType::class)
                 ->add('datumtijd', DateTimeType::class)
                 // ->add('tafels', CollectionType::class)
-                ->add('save', SubmitType::class, array('label' => 'Maak Boeking'))
+                ->add('save', SubmitType::class, array('label' => 'Zoek tafels'))
                 ->getForm();
         } else {
+            $tafels = [];
+            foreach ($boeking['tafels'] as $key => $personen) {
+                $tafels[$personen . ' personen '] = $key;
+                //array_push($tafels, $key.' -> '.$personen. ' personen ');
+            }
+            //dump($tafels);
             $form = $this->createFormBuilder($boeking)
                 ->add('aantal', IntegerType::class)
                 ->add('datumtijd', DateTimeType::class)
-                //->add('tafels', CollectionType::class)
-                ->add('save', SubmitType::class, array('label' => 'Maak Boeking'))
+                // ->add('tafels', CollectionType::class)
+/*                ->add('tafels', ChoiceType::class, [
+                    'choices' => $tafels,
+                    'multiple' => true,
+                ])*/
+                ->add('save', SubmitType::class, array('label' => 'Reserveren?'))
                 ->getForm();
         }
 
@@ -109,7 +120,54 @@ class BoekingsController extends AbstractController
             $boeking['tafels'] = $tafels;
             $session->set('boeking', $boeking);
 
-            //return $this->redirectToRoute('check');
+            return $this->redirectToRoute('book');
+        }
+
+        return $this->render('boekings/index.html.twig', array(
+            'controller_name' => 'BoekingsController',
+            'boeking' => $boeking,
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @Route("/book", name="book")
+     */
+    public function book(Request $request)
+    {
+        // get the cart from  the session
+        $session = $this->get('request_stack')->getCurrentRequest()->getSession();
+        // $cart = $session->set('cart', '');
+        $boeking = $session->get('boeking', array());
+
+        if (!empty($boeking['tafels'])) {
+            $tafels = [];
+            foreach ($boeking['tafels'] as $key => $personen) {
+                $tafels[$personen . ' personen '] = $key;
+                //array_push($tafels, $key.' -> '.$personen. ' personen ');
+            }
+            //dump($tafels);
+            $form = $this->createFormBuilder($boeking)
+                ->add('aantal', IntegerType::class)
+                ->add('datumtijd', DateTimeType::class)
+                // ->add('tafels', CollectionType::class)
+                ->add('tafels', ChoiceType::class, [
+                    'choices' => $tafels,
+                    'multiple' => true,
+                ])
+                ->add('save', SubmitType::class, array('label' => 'Maak Boeking'))
+                ->getForm();
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $boeking = $form->getData();
+dump($boeking);
+            $em = $this->getDoctrine()->getManager();
+            $repository = $this->getDoctrine()
+                ->getRepository(Reservatie::class);
         }
 
         return $this->render('boekings/index.html.twig', array(
