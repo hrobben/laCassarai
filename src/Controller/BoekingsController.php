@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Reservatie;
+use App\Entity\Tafel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -164,10 +165,25 @@ class BoekingsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $boeking = $form->getData();
-dump($boeking);
+            dump($boeking);
+            // afhandelen van reservatie en in dbase plaatsen.
             $em = $this->getDoctrine()->getManager();
-            $repository = $this->getDoctrine()
-                ->getRepository(Reservatie::class);
+            //$repository = $this->getDoctrine()->getRepository(Reservatie::class);
+            // opslaan
+            $reservatie = new Reservatie();
+            $reservatie->setAantal($boeking['aantal']);
+            $reservatie->setDatumTijd($boeking['datumtijd']);
+            $reservatie->setMedewerker($this->getUser());
+            $reservatie->setUser($this->getUser());  // dit zou nog een invoer veld kunnen worden.
+            foreach ($boeking['tafels'] as $tfl) {
+                $tafel = $this->getDoctrine()->getRepository('App:Tafel')->findOneBy(['id' => ($tfl+1)]);
+                $reservatie->addTafel($tafel);
+            }
+            $em->persist($reservatie);
+            $em->flush();
+
+            $session->remove('boeking');
+            return $this->redirectToRoute('boeken');
         }
 
         return $this->render('boekings/index.html.twig', array(
