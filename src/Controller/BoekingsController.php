@@ -24,7 +24,6 @@ class BoekingsController extends AbstractController
     {
         // get the cart from  the session
         $session = $this->get('request_stack')->getCurrentRequest()->getSession();
-        // $cart = $session->set('cart', '');
         $boeking = $session->get('boeking', array());
 
         if (empty($boeking)) {
@@ -32,7 +31,6 @@ class BoekingsController extends AbstractController
             $boeking = ['aantal' => 5, 'datumtijd' => $datum];
         }
 
-        // test $tijden->setBegintijd(new \DateTime("now"));
         return $this->render('boekings/index.html.twig', [
             'controller_name' => 'BoekingsController',
             'boeking' => $boeking,
@@ -47,7 +45,6 @@ class BoekingsController extends AbstractController
     {
         // get the cart from  the session
         $session = $this->get('request_stack')->getCurrentRequest()->getSession();
-        // $cart = $session->set('cart', '');
         $boeking = $session->get('boeking', array());
 
         if (empty($boeking)) {
@@ -56,24 +53,16 @@ class BoekingsController extends AbstractController
             $form = $this->createFormBuilder($boeking)
                 ->add('aantal', IntegerType::class)
                 ->add('datumtijd', DateTimeType::class)
-                // ->add('tafels', CollectionType::class)
                 ->add('save', SubmitType::class, array('label' => 'Zoek tafels'))
                 ->getForm();
         } else {
             $tafels = [];
             foreach ($boeking['tafels'] as $key => $personen) {
                 $tafels[$personen . ' personen '] = $key;
-                //array_push($tafels, $key.' -> '.$personen. ' personen ');
             }
-            //dump($tafels);
             $form = $this->createFormBuilder($boeking)
                 ->add('aantal', IntegerType::class)
                 ->add('datumtijd', DateTimeType::class)
-                // ->add('tafels', CollectionType::class)
-/*                ->add('tafels', ChoiceType::class, [
-                    'choices' => $tafels,
-                    'multiple' => true,
-                ])*/
                 ->add('save', SubmitType::class, array('label' => 'Reserveren?'))
                 ->getForm();
         }
@@ -138,20 +127,16 @@ class BoekingsController extends AbstractController
     {
         // get the cart from  the session
         $session = $this->get('request_stack')->getCurrentRequest()->getSession();
-        // $cart = $session->set('cart', '');
         $boeking = $session->get('boeking', array());
 
         if (!empty($boeking['tafels'])) {
             $tafels = [];
             foreach ($boeking['tafels'] as $key => $personen) {
                 $tafels[$personen . ' personen '] = $key;
-                //array_push($tafels, $key.' -> '.$personen. ' personen ');
             }
-            //dump($tafels);
             $form = $this->createFormBuilder($boeking)
                 ->add('aantal', IntegerType::class)
                 ->add('datumtijd', DateTimeType::class)
-                // ->add('tafels', CollectionType::class)
                 ->add('tafels', ChoiceType::class, [
                     'choices' => $tafels,
                     'multiple' => true,
@@ -165,11 +150,9 @@ class BoekingsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $boeking = $form->getData();
-            dump($boeking);
+                dump($boeking);
             // afhandelen van reservatie en in dbase plaatsen.
             $em = $this->getDoctrine()->getManager();
-            //$repository = $this->getDoctrine()->getRepository(Reservatie::class);
-            // opslaan
             $reservatie = new Reservatie();
             $reservatie->setAantal($boeking['aantal']);
             $reservatie->setDatumTijd($boeking['datumtijd']);

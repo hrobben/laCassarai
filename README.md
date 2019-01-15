@@ -7,3 +7,5 @@ A project for training for students who want to train for the exames.
 Mostly reservation of tables in a Restaurant which can be turned to a project of chamber reservations.
 
 It checks availability for the tables. Sitting time for a restaurant visit is 4 hours.
+
+![Screenshot](Casserai.png)
