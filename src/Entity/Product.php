@@ -44,6 +44,24 @@ class Product
      */
     private $menus;
 
+    /**
+     * @ORM\Column(type="string")
+     *
+     */
+    private $brochure;
+
+    public function getBrochure()
+    {
+        return $this->brochure;
+    }
+
+    public function setBrochure($brochure)
+    {
+        $this->brochure = $brochure;
+
+        return $this;
+    }
+
     public function __construct()
     {
         $this->menus = new ArrayCollection();

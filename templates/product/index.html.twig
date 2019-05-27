@@ -12,6 +12,7 @@
                 <th>Omschrijving</th>
                 <th>Prijs</th>
                 <th>Voorraad</th>
+                <th>Image</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                 <td>{{ product.omschrijving }}</td>
                 <td>{{ product.prijs }}</td>
                 <td>{{ product.voorraad }}</td>
+                <td>{{ product.brochure }}</td>
                 <td>
                     <a href="{{ path('product_show', {'id': product.id}) }}">show</a>
                     <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>

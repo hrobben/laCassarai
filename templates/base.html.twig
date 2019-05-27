@@ -20,6 +20,7 @@
         <a class="p-2 text-dark" href="{{ path('check') }}">Home</a>
 
         {% if is_granted("ROLE_USER") %}
+            <a class="p-2 text-dark" href="{{ path('room_index') }}">Rooms</a>
             <a class="p-2 text-dark" href="{{ path('fos_user_profile_edit') }}">Profile</a>
             <a class="p-2 text-dark" href="{{ path('bank_cart_index') }}">BankAccount</a>
         {% endif %}

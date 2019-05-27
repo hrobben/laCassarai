@@ -26,6 +26,7 @@ class User extends BaseUser
         parent::__construct();
         $this->bankCarts = new ArrayCollection();
         $this->reservaties = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
         // your own logic
     }
 
@@ -115,6 +116,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="App\Entity\Reservatie", mappedBy="user")
      */
     private $reservaties;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="user")
+     */
+    private $reservations;
 
 
     public function getId(): ?int
@@ -298,6 +304,37 @@ class User extends BaseUser
             // set the owning side to null (unless already changed)
             if ($reservaty->getUser() === $this) {
                 $reservaty->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reservation[]
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->contains($reservation)) {
+            $this->reservations->removeElement($reservation);
+            // set the owning side to null (unless already changed)
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
             }
         }
 
