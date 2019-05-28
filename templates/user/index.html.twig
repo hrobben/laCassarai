@@ -48,7 +48,7 @@
                 <td>{{ user.passwordRequestedAt ? user.passwordRequestedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ user.roles ? user.roles|join(', ') : '' }}</td>
                 <td>{{ user.id }}</td>
-                <td>{{ user.lastActivityAt }}</td>
+                <td>{{ user.lastActivityAt|date('d-m-Y H:i') }}</td>
                 <td>{{ user.telnr }}</td>
                 <td>{{ user.mobilenr }}</td>
                 <td>{{ user.firstname }}</td>

@@ -28,6 +28,32 @@
                 <li>Your template at <code><a href="{{ 'templates/default/index.html.twig'|file_link(0) }}">templates/default/index.html.twig</a></code>
                 </li>
             </ul>
+
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>LastActivityAt</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for user in users %}
+                    {% if (user.lastActivityAt) %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.lastActivityAt|date('d-m-Y H:i') }}</td>
+                        </tr>
+                    {% endif %}
+                {% else %}
+                    <tr>
+                        <td colspan="23">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
         {% elseif role == 'USER' %}
             <h1>Welkom {{ app.user.username }} met email {{ app.user.email }}</h1>
         {% else %}
